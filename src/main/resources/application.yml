@@ -1,0 +1,55 @@
+server:
+  port: ${APP_PORT:8080}
+  servlet:
+    context-path: "/sm"
+
+spring:
+  datasource:
+    username: ${DB_USER:sma}
+    password: ${DB_PASSWORD:sma}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/social_media_db}
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: SpringBootJPAHikariCP
+      minimum-idle: ${POOL_MIN_IDLE:5} #Default: 10
+      maximum-pool-size: ${POOL_SIZE:25} #Default: 10
+      idle-timeout: ${POOL_IDLE_TIMEOUT:30000} #Default: 600000 (10 minutes)
+      max-lifetime: ${POOL_MAX_LIFETIME:1200000} #Default: 1800000 (30 minutes)
+      connection-timeout: ${POOL_CONNECTION_TIMEOUT:20000} #Default: 30000 (30 seconds)
+
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    user: ${DB_USER:sma}
+    password: ${DB_PASSWORD:sma}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/social_media_db}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+app:
+  minio:
+    url: ${S3_URL:http://127.0.0.1:9000}
+    buckets:
+      photos:
+        name: ${BUCKET_PHOTOS_NAME:photos}
+        access: ${BUCKET_PHOTOS_ACCESS:user}
+        secret: ${BUCKET_PHOTOS_SECRET:password}
+      documents:
+        name: ${BUCKET_DOCUMENTS_NAME:documents}
+        access: ${BUCKET_DOCUMENTS_ACCESS:user}
+        secret: ${BUCKET_DOCUMENTS_SECRET:password}
+jwt:
+  secret:
+    access: supermegasecret
+    refresh: supermegarefreshsecret
+
